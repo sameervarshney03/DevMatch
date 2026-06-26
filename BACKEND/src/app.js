@@ -29,8 +29,9 @@ app.use("/",userRouter);
 connectDB().then(()=>{
     console.log("Connected to database.");
     app.listen(PORT,()=>{
-    console.log("App is listening at 3333 post successfully...");
+    console.log("App is listening at " + PORT + " post successfully...");
     });
 }).catch(err=>{
-    console.log("Error occured.");
-})
+    console.error("Database connection error:", err.message);
+    process.exit(1);
+});
