@@ -45,7 +45,11 @@ authRouter.post("/login", async (req, res) => {
 
         if(isPasswordCorrect){
             const token = await userData.getJwt();
-            res.cookie("token",token);
+            res.cookie("token",token, {
+                httpOnly: true,
+                secure: true,
+                sameSite: "none"
+            });
             res.send(userData);
         }
 
@@ -61,6 +65,9 @@ authRouter.post("/login", async (req, res) => {
 authRouter.post("/logout", async (req,res)=>{
     res.cookie("token",null,{
         expires: new Date(Date.now()),
+        httpOnly: true,
+        secure: true,
+        sameSite: "none"
     })
     res.send();
 });
