@@ -8,8 +8,8 @@ import Footer from "./Footer";
 import { BASE_URL } from "../utils/constant";
 
 const Login = () => {
-  const [emailId, setEmailId] = useState("samv12761@gmail.com");
-  const [password, setPassword] = useState("Sameer@kz0");
+  const [emailId, setEmailId] = useState("sample@gmail.com");
+  const [password, setPassword] = useState("Sample@123");
   const dispatch = useDispatch();
   const user = useSelector((store)=> store.user);
   const navigate = useNavigate();
