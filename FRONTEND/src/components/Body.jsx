@@ -12,14 +12,13 @@ const Body = () => {
 
   const fetchUser = async () => {
     try {
-      if (user) return; // If already logged in, do nothing
+      if (user) return;
       
       const res = await axios.get(BASE_URL + "/profile", {
         withCredentials: true,
       });
       dispatch(addUser(res.data));
     } catch (err) {
-      // If error (e.g., token expired or no token), maybe navigate to login or just do nothing
       if (window.location.pathname === "/") {
         navigate("/login");
       }

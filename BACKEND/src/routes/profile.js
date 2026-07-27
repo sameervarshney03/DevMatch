@@ -44,7 +44,11 @@ profileRouter.patch("/profile/update", userAuth, async (req, res) => {
       user: updatedUser,
     });
   } catch (err) {
-    res.status(400).send("ERROR: " + err.message);
+    if (err.name === "ValidationError") {
+      const messages = Object.values(err.errors).map(val => val.message);
+      return res.status(400).send(messages.join(", "));
+    }
+    res.status(400).send(err.message);
   }
 });
 

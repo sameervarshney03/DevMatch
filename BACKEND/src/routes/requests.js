@@ -78,19 +78,25 @@ requestRouter.post(
         throw new Error("Request does not exist.");
       }
 
-      const fromUserExist = await User.findOne(requestExist.fromUser);
+      const fromUserExist = await User.findById(requestExist.fromUser);
 
       if (!fromUserExist) {
         throw new Error("Request does not exist.");
       }
 
-      requestExist.status = status;
-
-      const data = await requestExist.save();
-      res.json({
-        message: `Request ${status}.`,
-        data,
-      });
+      if (status === "rejected") {
+        await ConnectionRequest.findByIdAndDelete(requestId);
+        return res.json({
+          message: "Request rejected and deleted from database.",
+        });
+      } else {
+        requestExist.status = status;
+        const data = await requestExist.save();
+        res.json({
+          message: `Request ${status}.`,
+          data,
+        });
+      }
 
     } catch (err) {
       res.status(401).send("ERROR: " + err.message);

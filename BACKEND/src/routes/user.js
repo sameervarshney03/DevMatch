@@ -15,7 +15,7 @@ userRouter.get("/user/requests", userAuth, async (req, res) => {
     }).populate("fromUser", safeData);
 
     const validRequests = requests.filter((req) => req.fromUser !== null);
-
+    
     res.json({
       message: "Here are your requests.",
       requests: validRequests,
@@ -37,7 +37,7 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
       .populate("fromUser", safeData)
       .populate("toUser", safeData);
     const validateConnections = connections.filter(
-      (req) => req.fromUser || req.toUser !== null
+      (req) => req.fromUser && req.toUser
     );
     const showConnections = validateConnections.map((con) => {
       if (con.fromUser._id.toString() === loggedUserId.toString()) {
@@ -54,11 +54,33 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
   }
 });
 
+userRouter.post("/user/connection/remove/:userId", userAuth, async (req, res) => {
+  try {
+    const loggedUserId = req.user._id;
+    const targetUserId = req.params.userId;
+
+    const connection = await ConnectionRequest.findOneAndDelete({
+      $or: [
+        { fromUser: loggedUserId, toUser: targetUserId, status: "accepted" },
+        { fromUser: targetUserId, toUser: loggedUserId, status: "accepted" },
+      ]
+    });
+
+    if (!connection) {
+      throw new Error("Connection not found.");
+    }
+
+    res.json({ message: "Connection removed successfully." });
+  } catch (err) {
+    res.status(400).send("ERROR :" + err.message);
+  }
+});
+
 userRouter.get("/feed", userAuth, async (req, res) => {
   try {
     const loggedUserId = req.user._id;
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
+    let limit = parseInt(req.query.limit) || 10;
     limit = limit > 50 ? 50 : limit;
     const skip = (page - 1)*limit;
 

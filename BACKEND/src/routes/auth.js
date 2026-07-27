@@ -23,10 +23,22 @@ authRouter.post("/signup",async (req,res)=>{
         });
 
         await user.save();
-        res.send("SignUp complete.");
+        
+        // Auto-login user upon signup
+        const token = await user.getJwt();
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none"
+        });
+        
+        res.json(user);
 
     } catch(err){
-        res.status(400).send("ERROR :"+err.message);
+        if (err.code === 11000) {
+            return res.status(400).send("An account with this email already exists.");
+        }
+        res.status(400).send("ERROR :" + err.message);
     }
     
 })

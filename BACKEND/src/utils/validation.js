@@ -27,7 +27,7 @@ export const validateUpdatedData = (req) => {
             "country",
             "about",
             "skills",
-            "photoUrl"
+            "photourl"
         ];
 
         const isUpdateAllowed = Object.keys(data).every(key =>

@@ -7,7 +7,7 @@ export const userAuth = async (req, res, next) => {
     if (!token) {
       throw new Error("Please login again.");
     }
-    const decodedData = jwt.verify(token, "kz@30");
+    const decodedData = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decodedData._id);
     if (!user) throw new Error("User not found.");
     req.user = user;

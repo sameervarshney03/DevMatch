@@ -1,2 +1,2 @@
-- Create a landing page home screen
+- Edit profile feature remaining
 - 
