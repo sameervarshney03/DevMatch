@@ -84,12 +84,10 @@ userRouter.get("/feed", userAuth, async (req, res) => {
     limit = limit > 50 ? 50 : limit;
     const skip = (page - 1)*limit;
 
-    // all connection + request docs involving logged user
     const connections = await ConnectionRequest.find({
       $or: [{ toUser: loggedUserId }, { fromUser: loggedUserId }],
     });
 
-    // collect user IDs to exclude
     const excludeUserIds = new Set();
 
     connections.forEach((con) => {
@@ -101,7 +99,6 @@ userRouter.get("/feed", userAuth, async (req, res) => {
       }
     });
 
-    // also exclude self
     excludeUserIds.add(loggedUserId.toString());
 
     const feedUsers = await User.find({

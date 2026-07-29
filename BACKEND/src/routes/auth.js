@@ -9,10 +9,8 @@ export const authRouter = express.Router();
 authRouter.post("/signup",async (req,res)=>{
     try{
         const {firstName,lastName,password,email} = req.body;
-        //Validating the user info
         validateSignUp(req);
 
-        //password encryption
         const passwordHash = await bcrypt.hash(password,10);
 
         const user = new User({
@@ -24,7 +22,6 @@ authRouter.post("/signup",async (req,res)=>{
 
         await user.save();
         
-        // Auto-login user upon signup
         const token = await user.getJwt();
         res.cookie("token", token, {
             httpOnly: true,

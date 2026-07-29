@@ -25,7 +25,6 @@ app.use("/",profileRouter);
 app.use("/",requestRouter);
 app.use("/",userRouter);
 
-//Listening to port 3333 and and first connecting to DB
 connectDB().then(()=>{
     console.log("Connected to database.");
     app.listen(PORT,()=>{
