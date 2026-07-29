@@ -31,8 +31,6 @@ connectionRequest.pre("save", async function () {
         throw new Error("You can't send a connection request to yourself.");
     }
     
-    // In async middleware, if you don't throw an error, 
-    // Mongoose treats it as 'next()' was called.
 });
 
 
