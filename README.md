@@ -1,4 +1,4 @@
-# DevMatch (Developer Tinder)
+# DevMatch
 
 DevMatch is a full-stack web application designed as a "Tinder for Developers". It allows developers to create profiles, browse other developers on a feed, and send or receive connection requests to build their network.
 
